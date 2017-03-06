@@ -50,7 +50,7 @@ pub struct Scheduler {
 }
 
 impl Scheduler {
-    fn new(intervals: &'static str) -> SchedulerResult {
+    pub fn new(intervals: &'static str) -> SchedulerResult {
         let reRes = Regex::new(r"^\s*((\*(/\d+)?)|[0-9-,/]+)(\s+((\*(/\d+)?)|[0-9-,/]+)){4,5}\s*$");
 
         match reRes {
@@ -94,7 +94,7 @@ impl Scheduler {
         }
     }
 
-    fn parseTimeFields(&mut self) -> Result<(), CronError> {
+    pub fn parseTimeFields(&mut self) -> Result<(), CronError> {
         if self.seconds != "" {
             self.timePoints.insert("seconds", try!(parseTimeField(self.seconds, 0, 59)));
         } else {
@@ -110,7 +110,7 @@ impl Scheduler {
         Ok(())
     }
 
-    fn isTimeUp(&self, t: &time::Tm) -> bool {
+    pub fn isTimeUp(&self, t: &time::Tm) -> bool {
         let (second, minute, hour, day, month, weekday) = (t.tm_sec as u32,
                                                            t.tm_min as u32,
                                                            t.tm_hour as u32,
