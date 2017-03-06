@@ -1,0 +1,8 @@
+[package]
+name = "cron"
+version = "0.1.0"
+authors = ["gaobushuang <stormgbs@gmail.com>"]
+
+[dependencies]
+regex="*"
+time="*"
