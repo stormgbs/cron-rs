@@ -1,5 +1,5 @@
 [package]
-name = "cron-rs"
+name = "cron_rs"
 version = "0.1.0"
 authors = ["gaobushuang <stormgbs@gmail.com>"]
 description = "A Cron Parser Library Written In Rust"
@@ -9,7 +9,7 @@ readme = "README.md"
 license = "MIT"
 
 [lib]
-name = "cron-rs"
+name = "cron_rs"
 
 [dependencies]
 regex="*"
