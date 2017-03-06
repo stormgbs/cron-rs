@@ -12,5 +12,5 @@ license = "MIT"
 name = "cron_rs"
 
 [dependencies]
-regex="*"
-time="*"
+regex="~0.2"
+time="~0.1"
