@@ -27,13 +27,12 @@ Scheduler is a cron time shceduler.
     let sch = Scheduler::new("*/2 1-8,11 * * *").unwrap();
 `
 
-### Verify Time
+### Verify Time 
 
-`
+` 
     let tm = time::now();
-
     assert!(sch.isTimeUP(&tm));
-`
+` 
 
 ## DEPENDENICIES 
 
