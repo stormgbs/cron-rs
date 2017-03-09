@@ -2,6 +2,7 @@ extern crate libc;
 extern crate time;
 extern crate regex;
 extern crate serde_json;
+extern crate hyper;
 
 #[macro_use]
 extern crate serde_derive;
