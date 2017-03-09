@@ -7,6 +7,7 @@ pub enum Error {
     ErrParseJob(String),
     ErrParseInt(ParseIntError),
     ErrRunCommand(String),
+    ErrKillProcess(String),
 }
 
 impl From<ParseIntError> for Error {
@@ -21,6 +22,7 @@ impl fmt::Display for Error {
             &Error::ErrCronFormat(ref x) => write!(f, "<ErrCronFormat> {:?}", x),
             &Error::ErrParseJob(ref x) => write!(f, "<ErrParseJob> {:?}", x),
             &Error::ErrRunCommand(ref x) => write!(f, "<ErrRunCommand> {:?}", x),
+            &Error::ErrKillProcess(ref x) => write!(f, "<ErrKillProcess> {:?}", x),
             &Error::ErrParseInt(ref e) => write!(f, "<ErrParseInt> {:?}", e),
         }
     }

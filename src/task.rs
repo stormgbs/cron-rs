@@ -40,7 +40,8 @@ impl Task {
         let tx = outputChanTx.clone();
 
         let mut process = try!(self.command
-            .stdout(Stdio::inherit())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
             .spawn()
             .map_err(|e| Error::ErrRunCommand(e.to_string())));
 
@@ -48,7 +49,6 @@ impl Task {
             let pid = process.id() as libc::pid_t;
             libc::setpgid(pid, pid);
         }
-
 
         let stdout = process.stdout.take().unwrap();
 
@@ -62,7 +62,9 @@ impl Task {
             let breader = BufReader::new(stdout);
 
             for line in breader.lines() {
-                tx.send(line.unwrap());
+                if let Ok(mut x) = line {
+                    tx.send(x);
+                }
             }
         });
 
@@ -73,7 +75,19 @@ impl Task {
     // waits for it to complete.
     pub fn run(&mut self) {}
 
-    pub fn stop(&mut self) {}
+    pub fn kill(&mut self) -> Result<(), Error> {
+        if let Some(ref mut process) = self.process {
+            process.kill()
+                .map_err(|e| Error::ErrKillProcess(e.to_string()))
+                .map(|_| ())
+        } else {
+            Ok(())
+        }
+    }
+
+    pub fn packets(&mut self) -> TaskLogIterator {
+        TaskLogIterator { task: self }
+    }
 }
 
 pub struct TaskLogIterator<'a> {
@@ -88,5 +102,19 @@ impl<'a> Iterator for TaskLogIterator<'a> {
             Some(ref x) => x.try_recv().ok(),
             None => None,
         }
+    }
+}
+
+#[test]
+fn test_start_task() {
+    let mut cmd = Command::new("ls");
+    cmd.arg("-al")
+        .arg(".");
+
+    let mut task = Task::new(cmd);
+    task.start();
+
+    for line in task.packets() {
+        println!("==> {:?}", line);
     }
 }

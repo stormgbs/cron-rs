@@ -13,7 +13,10 @@ mod job;
 mod cron;
 mod task;
 
+use std::process::Command;
+
 use scheduler::Scheduler;
+use task::Task;
 
 fn main() {
     let cron01 = Scheduler::new("*/2 1-4,16,11,17 * * *").unwrap();
@@ -21,4 +24,17 @@ fn main() {
 
     println!("{:?}", cron01);
     println!("{:?} {}", &tm, cron01.isTimeUp(&tm));
+
+    // Task
+    let mut cmd = Command::new("ls");
+    cmd.arg("-al")
+        .arg(".");
+    let mut task = Task::new(cmd);
+    task.start();
+
+    loop {
+        for line in task.packets() {
+            println!("==> {:?}", line);
+        }
+    }
 }
