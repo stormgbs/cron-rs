@@ -32,9 +32,7 @@ fn main() {
     let mut task = Task::new(cmd);
     task.start();
 
-    loop {
-        for line in task.packets() {
-            println!("==> {:?}", line);
-        }
+    for line in task.packets() {
+        println!("==> {:?}", line);
     }
 }

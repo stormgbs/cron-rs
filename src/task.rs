@@ -17,8 +17,10 @@ pub struct Task {
     isStarted: bool,
     pid: Option<u32>,
 
-    outputChanRx: Option<Receiver<String>>,
-    outputChanTx: Option<Sender<String>>,
+    outputChanRx: Option<Receiver<Option<String>>>,
+    outputChanTx: Option<Sender<Option<String>>>,
+
+    finishNotify: Option<Receiver<()>>,
 }
 
 impl Task {
@@ -29,6 +31,7 @@ impl Task {
             isStarted: false,
             outputChanTx: None,
             outputChanRx: None,
+            finishNotify: None,
             pid: None,
         }
     }
@@ -38,6 +41,9 @@ impl Task {
     pub fn start(&mut self) -> Result<(), Error> {
         let (outputChanTx, outputChanRx) = mpsc::channel();
         let tx = outputChanTx.clone();
+
+        let (finishNotifyTx, finishNotifyRx) = mpsc::channel();
+        let finishTx = finishNotifyTx.clone();
 
         let mut process = try!(self.command
             .stdout(Stdio::piped())
@@ -56,6 +62,7 @@ impl Task {
         self.process = Some(process);
         self.outputChanTx = Some(outputChanTx);
         self.outputChanRx = Some(outputChanRx);
+        self.finishNotify = Some(finishNotifyRx);
 
 
         thread::spawn(move || {
@@ -63,9 +70,12 @@ impl Task {
 
             for line in breader.lines() {
                 if let Ok(mut x) = line {
-                    tx.send(x);
+                    tx.send(Some(x));
                 }
             }
+
+            // finish notify
+            finishNotifyTx.send(())
         });
 
         Ok(())
@@ -99,7 +109,13 @@ impl<'a> Iterator for TaskLogIterator<'a> {
 
     fn next(&mut self) -> Option<String> {
         match self.task.outputChanRx {
-            Some(ref x) => x.try_recv().ok(),
+            Some(ref x) => {
+                if let Ok(mut msg) = x.try_recv() {
+                    msg.take()
+                } else {
+                    None
+                }
+            }
             None => None,
         }
     }
