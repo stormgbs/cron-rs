@@ -9,6 +9,7 @@ use std::iter::Iterator;
 use libc;
 
 use error::Error;
+use message_bus::OutputIterator;
 
 pub struct Task {
     command: Command,
@@ -67,9 +68,10 @@ impl Task {
 
         thread::spawn(move || {
             let breader = BufReader::new(stdout);
+            let outoutIter = OutputIterator::new(breader);
 
-            for line in breader.lines() {
-                if let Ok(mut x) = line {
+            for chunk in outoutIter {
+                if let Ok(mut x) = chunk {
                     tx.send(Some(x));
                 }
             }

@@ -12,11 +12,15 @@ mod scheduler;
 mod job;
 mod cron;
 mod task;
+mod job_master;
+mod message_bus;
 
 use std::process::Command;
 
 use scheduler::Scheduler;
 use task::Task;
+use std::thread;
+use std::time as stdtime;
 
 fn main() {
     let cron01 = Scheduler::new("*/2 1-4,16,11,17 * * *").unwrap();
@@ -31,6 +35,8 @@ fn main() {
         .arg(".");
     let mut task = Task::new(cmd);
     task.start();
+
+    thread::sleep(stdtime::Duration::from_millis(400));
 
     for line in task.packets() {
         println!("==> {:?}", line);

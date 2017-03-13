@@ -106,7 +106,7 @@ impl Scheduler {
                      self.timePoints.get("weekdays").unwrap().contains(&weekday);
 
         if self.timeFiledsLength == 5 {
-            true && isLeft
+            isLeft
         } else {
             isSecond && isLeft
         }

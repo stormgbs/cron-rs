@@ -8,6 +8,7 @@ pub enum Error {
     ErrParseInt(ParseIntError),
     ErrRunCommand(String),
     ErrKillProcess(String),
+    ErrRead(String),
 }
 
 impl From<ParseIntError> for Error {
@@ -24,6 +25,7 @@ impl fmt::Display for Error {
             &Error::ErrRunCommand(ref x) => write!(f, "<ErrRunCommand> {:?}", x),
             &Error::ErrKillProcess(ref x) => write!(f, "<ErrKillProcess> {:?}", x),
             &Error::ErrParseInt(ref e) => write!(f, "<ErrParseInt> {:?}", e),
+            &Error::ErrRead(ref x) => write!(f, "<ErrRead> {:?}", x),
         }
     }
 }
