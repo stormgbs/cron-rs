@@ -6,17 +6,25 @@ use std::thread;
 
 const MAXREADBUFFERSIZE: usize = 65536;
 
-pub struct OutputIterator<B> {
+pub struct Message {
+    pub taskId: u32,
+    pub kind: String,
+    pub startUnixTimeNs: u64,
+    pub endUnixTimeNs: u64,
+    pub body: String,
+}
+
+pub struct OutputChunkIterator<B> {
     buf: B,
 }
 
-impl<B: BufRead> OutputIterator<B> {
-    pub fn new(buf: B) -> OutputIterator<B> {
-        OutputIterator { buf: buf }
+impl<B: BufRead> OutputChunkIterator<B> {
+    pub fn new(buf: B) -> OutputChunkIterator<B> {
+        OutputChunkIterator { buf: buf }
     }
 }
 
-impl<B: BufRead> Iterator for OutputIterator<B> {
+impl<B: BufRead> Iterator for OutputChunkIterator<B> {
     type Item = Result<String, Error>;
 
     fn next(&mut self) -> Option<Result<String, Error>> {

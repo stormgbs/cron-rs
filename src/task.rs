@@ -9,43 +9,31 @@ use std::iter::Iterator;
 use libc;
 
 use error::Error;
-use message_bus::OutputIterator;
+use output_chunk::{Message, OutputChunkIterator};
 
 pub struct Task {
+    id: u32,
     command: Command,
     process: Option<Child>,
 
     isStarted: bool,
     pid: Option<u32>,
-
-    outputChanRx: Option<Receiver<Option<String>>>,
-    outputChanTx: Option<Sender<Option<String>>>,
-
-    finishNotify: Option<Receiver<()>>,
 }
 
 impl Task {
-    pub fn new(cmd: Command) -> Task {
+    pub fn new(id: u32, cmd: Command) -> Task {
         Task {
+            id: id,
             command: cmd,
             process: None,
             isStarted: false,
-            outputChanTx: None,
-            outputChanRx: None,
-            finishNotify: None,
             pid: None,
         }
     }
 
     // Start the specified command but
     // does not wait for it to complete.
-    pub fn start(&mut self) -> Result<(), Error> {
-        let (outputChanTx, outputChanRx) = mpsc::channel();
-        let tx = outputChanTx.clone();
-
-        let (finishNotifyTx, finishNotifyRx) = mpsc::channel();
-        let finishTx = finishNotifyTx.clone();
-
+    pub fn start(&mut self, output: Sender<Message>) -> Result<(), Error> {
         let mut process = try!(self.command
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
@@ -61,23 +49,24 @@ impl Task {
 
         self.isStarted = true;
         self.process = Some(process);
-        self.outputChanTx = Some(outputChanTx);
-        self.outputChanRx = Some(outputChanRx);
-        self.finishNotify = Some(finishNotifyRx);
 
 
         thread::spawn(move || {
             let breader = BufReader::new(stdout);
-            let outoutIter = OutputIterator::new(breader);
+            let outputIter = OutputChunkIterator::new(breader);
 
-            for chunk in outoutIter {
+            for chunk in outputIter {
                 if let Ok(mut x) = chunk {
-                    tx.send(Some(x));
+                    output.send(Message {
+                        taskId: 100,
+                        //taskId: self.id,
+                        kind: "unknown".to_string(),
+                        startUnixTimeNs: 0,
+                        endUnixTimeNs: 0,
+                        body: "WTH".to_string(),
+                    });
                 }
             }
-
-            // finish notify
-            finishNotifyTx.send(())
         });
 
         Ok(())
@@ -97,31 +86,31 @@ impl Task {
         }
     }
 
-    pub fn packets(&mut self) -> TaskLogIterator {
-        TaskLogIterator { task: self }
-    }
+    //pub fn packets(&mut self) -> TaskLogIterator {
+    //    TaskLogIterator { task: self }
+    //}
 }
 
-pub struct TaskLogIterator<'a> {
-    task: &'a mut Task,
-}
-
-impl<'a> Iterator for TaskLogIterator<'a> {
-    type Item = String;
-
-    fn next(&mut self) -> Option<String> {
-        match self.task.outputChanRx {
-            Some(ref x) => {
-                if let Ok(mut msg) = x.try_recv() {
-                    msg.take()
-                } else {
-                    None
-                }
-            }
-            None => None,
-        }
-    }
-}
+//pub struct TaskLogIterator<'a> {
+//    task: &'a mut Task,
+//}
+//
+//impl<'a> Iterator for TaskLogIterator<'a> {
+//    type Item = String;
+//
+//    fn next(&mut self) -> Option<String> {
+//        match self.task.outputChanRx {
+//            Some(ref x) => {
+//                if let Ok(mut msg) = x.try_recv() {
+//                    msg.take()
+//                } else {
+//                    None
+//                }
+//            }
+//            None => None,
+//        }
+//    }
+//}
 
 #[test]
 fn test_start_task() {
@@ -131,8 +120,4 @@ fn test_start_task() {
 
     let mut task = Task::new(cmd);
     task.start();
-
-    for line in task.packets() {
-        println!("==> {:?}", line);
-    }
 }
