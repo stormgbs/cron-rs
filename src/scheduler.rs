@@ -9,27 +9,27 @@ use regex::Regex;
 use error::Error;
 use error::Error::ErrCronFormat;
 
-type SchedulerResult = Result<Scheduler, Error>;
+pub type SchedulerResult<'a> = Result<Scheduler<'a>, Error>;
 
 
 #[derive(Debug)]
-pub struct Scheduler {
-    seconds: &'static str,
-    minutes: &'static str,
-    hours: &'static str,
-    days: &'static str,
-    months: &'static str,
-    weekdays: &'static str,
+pub struct Scheduler<'a> {
+    seconds: &'a str,
+    minutes: &'a str,
+    hours: &'a str,
+    days: &'a str,
+    months: &'a str,
+    weekdays: &'a str,
 
     timeFiledsLength: usize,
 
-    timePoints: HashMap<&'static str, HashSet<u32>>,
+    timePoints: HashMap<&'a str, HashSet<u32>>,
 
     re: Regex,
 }
 
-impl Scheduler {
-    pub fn new(intervals: &'static str) -> SchedulerResult {
+impl<'a> Scheduler<'a> {
+    pub fn new(intervals: &'a str) -> SchedulerResult {
         let reRes = Regex::new(r"^\s*((\*(/\d+)?)|[0-9-,/]+)(\s+((\*(/\d+)?)|[0-9-,/]+)){4,5}\s*$");
 
         match reRes {
@@ -38,7 +38,7 @@ impl Scheduler {
                     return Err(ErrCronFormat(format!("invalid format: {}", intervals)));
                 }
 
-                let timeFileds: Vec<&'static str> = intervals.split_whitespace().collect();
+                let timeFileds: Vec<&str> = intervals.split_whitespace().collect();
                 let timeFiledsLength = timeFileds.len();
 
                 if timeFiledsLength != 5 && timeFiledsLength != 6 {
@@ -113,13 +113,13 @@ impl Scheduler {
     }
 }
 
-fn parseTimeField(inter: &'static str, min: u32, max: u32) -> Result<HashSet<u32>, Error> {
+fn parseTimeField(inter: &str, min: u32, max: u32) -> Result<HashSet<u32>, Error> {
     let mut points = HashSet::new();
-    let parts: Vec<&'static str> = inter.split(",").collect();
+    let parts: Vec<&str> = inter.split(",").collect();
 
     for part in parts {
-        let x: Vec<&'static str> = part.split("/").collect();
-        let y: Vec<&'static str> = x[0].split("-").collect();
+        let x: Vec<&str> = part.split("/").collect();
+        let y: Vec<&str> = x[0].split("-").collect();
 
         let mut _min = min;
         let mut _max = max;

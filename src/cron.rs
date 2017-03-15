@@ -1,9 +1,10 @@
 use std::str::FromStr;
+use std::process::Command;
 use serde_json;
 
 use error::Error;
 use error::Error::ErrCronFormat;
-use scheduler::Scheduler;
+use scheduler::{Scheduler, SchedulerResult};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CronEntry {
@@ -26,6 +27,19 @@ pub struct CronEntry {
 
     watch: bool,
     active: bool,
+}
+
+impl CronEntry {
+    pub fn to_command(&self) -> Command {
+        let fields: Vec<&str> = self.command.split_whitespace().collect();
+        let mut cmd = Command::new(fields[0]);
+        cmd.args(&fields[1..]);
+        cmd
+    }
+
+    pub fn to_scheduler(&self) -> SchedulerResult {
+        Scheduler::new(&self.intervals)
+    }
 }
 
 impl FromStr for CronEntry {
