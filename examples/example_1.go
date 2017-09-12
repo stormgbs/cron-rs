@@ -24,7 +24,8 @@ fn main() {
         .parse::<CronEntry>().unwrap();
 
     // Make time scheduler
-    let sch = Scheduler::new(cronEntry.intervals).unwrap();
+    let intervals = &*cronEntry.intervals.to_owned();
+    let sch = Scheduler::new(intervals).unwrap();
 
     // Make a new server and a output keeper,
     // then waiting for incoming message.
@@ -35,6 +36,7 @@ fn main() {
 
     // Make a new task
     let mut mytask = Task::new(sch, cronEntry, &keeper);
+
     // mytask spawn a new job periodically.
     mytask.start();
 
