@@ -4,7 +4,7 @@ Cron library is written in rust.
 
 ## USAGE
 
-### Cron Time Format 
+### Cron Time Format
 
 `[SECOND] MINUTE HOUR DAY MONTH WEEKDAY`
 
@@ -15,29 +15,28 @@ Cron library is written in rust.
 * MONTH (required): month of year, 1-12.
 * WEEKDAY (required): day of week, 0-6.
 
-#### Good Examples 
+#### Good Examples
 `*/2 1-8,11 * * *`
 
 `00 */2 1-8,11 * * *`
 
 ### Make A Scheduler
-Scheduler is a cron time shceduler. 
+Scheduler is a cron time shceduler.
 
 `
     let sch = Scheduler::new("*/2 1-8,11 * * *").unwrap();
 `
 
-### Verify Time 
+### Verify Time
 
-` 
+`
     let tm = time::now();
     assert!(sch.isTimeUP(&tm));
-` 
+`
 
-## DEPENDENICIES 
+## DEPENDENICIES
 
 * time
 * regex
 
 ## FAQ
-
