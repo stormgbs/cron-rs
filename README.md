@@ -35,7 +35,7 @@ The example below will show you:
 * Make a scheduler.  
 * Make a task, and then start it, it will spawn and excute new job periodically.  
 
-`
+```Rust
 extern crate time;
 extern crate cron_rs;
 
@@ -78,7 +78,7 @@ fn main() {
     // mytask spawn a new job and execute it every minute.
     mytask.start();
 }
-`
+```
 
 ## DEPENDENICIES
 
