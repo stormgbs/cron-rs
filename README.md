@@ -1,6 +1,6 @@
 # cron-rs
 
-Cron library is written in rust.
+Cron library that is written in rust.
 
 ## USAGE
 
@@ -21,7 +21,7 @@ Cron library is written in rust.
 `00 */2 1-8,11 * * *`
 
 ### Make A Scheduler
-Scheduler is a cron time shceduler. 
+Scheduler is a cron time scheduler. 
 
 `
     let sch = Scheduler::new("*/2 1-8,11 * * *").unwrap();
