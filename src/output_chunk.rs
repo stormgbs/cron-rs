@@ -7,7 +7,7 @@ use std::thread;
 const MAXREADBUFFERSIZE: usize = 65536;
 
 pub struct Message {
-    pub taskId: u32,
+    pub jobId: u32,
     pub kind: String,
     pub startUnixTimeNs: u64,
     pub endUnixTimeNs: u64,
@@ -32,7 +32,7 @@ impl<B: BufRead> Iterator for OutputChunkIterator<B> {
         let mut buffer = [0; MAXREADBUFFERSIZE];
 
         loop {
-            // job will be executed in the zero seconds,
+            // task will be executed in the zero seconds,
             // so, just take easy :)
             if time::now().tm_sec == 59 {
                 break;

@@ -52,7 +52,7 @@ impl FromStr for CronEntry {
 
 #[test]
 fn test_from_str() {
-    let e = r#"{"intervals":"* * * * *","command":"date +%F_%T","description":"每分钟打印详细时间","daemon":false,"testRun":true,"timeoutSeconds":5,"autokill":true,"alarmEmail":false,"alarmSms":true,"alarmUsers":"gaobushuang","id":1,"cronId":1,"treeId":261,"treePath":"b2c.b2cop.build-ci.build-ci.cn-test","active":false,"updateTime":"2017-02-07T13:22:52+08:00","lastCode":0,"lastTask":0,"watch":true,"host":""}"#
+    let e = r#"{"intervals":"* * * * *","command":"date +%F_%T","description":"每分钟打印详细时间","daemon":false,"testRun":true,"timeoutSeconds":5,"autokill":true,"alarmEmail":false,"alarmSms":true,"alarmUsers":"gaobushuang","id":1,"cronId":1,"treeId":261,"treePath":"b2c.b2cop.build-ci.build-ci.cn-test","active":false,"updateTime":"2017-02-07T13:22:52+08:00","lastCode":0,"lastJob":0,"watch":true,"host":""}"#
         .parse::<CronEntry>().unwrap();
     println!("{:?}", e);
 }
