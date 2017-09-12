@@ -8,25 +8,25 @@ use scheduler::{Scheduler, SchedulerResult};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CronEntry {
-    id: u32,
-    cronId: u32,
-    treeId: u64,
-    treePath: String,
+    pub id: u32,
+    pub cronId: u32,
+    pub treeId: u64,
+    pub treePath: String,
 
-    intervals: String,
-    command: String,
-    description: String,
-    daemon: bool,
-    testRun: bool,
-    timeoutSeconds: u32,
-    autokill: bool,
-    alarmEmail: bool,
-    alarmSms: bool,
-    alarmUsers: String,
-    host: String,
+    pub intervals: String,
+    pub command: String,
+    pub description: String,
+    pub daemon: bool,
+    pub testRun: bool,
+    pub timeoutSeconds: u32,
+    pub autokill: bool,
+    pub alarmEmail: bool,
+    pub alarmSms: bool,
+    pub alarmUsers: String,
+    pub host: String,
 
-    watch: bool,
-    active: bool,
+    pub watch: bool,
+    pub active: bool,
 }
 
 impl CronEntry {
