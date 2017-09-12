@@ -39,7 +39,7 @@ impl<'a, 'b: 'a> Task<'a, 'b> {
             }
 
             // sleep
-            thread::sleep(stdtime::Duration::from_millis(1000u64 * (60u64-tm.tm_sec)));
+            thread::sleep(stdtime::Duration::from_millis((60-tm.tm_sec) as u64 * 1000u64));
         }
     }
 
