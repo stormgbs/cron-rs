@@ -36,7 +36,7 @@ fn main() {
     // Make a new task
     let mut mytask = Task::new(sch, cronEntry, &keeper);
     // mytask spawn a new job periodically.
-    mytask.do();
+    mytask.start();
 
     // // This is a raw job.
     // let mut cmd = Command::new("ls");

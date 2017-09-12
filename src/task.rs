@@ -24,8 +24,8 @@ impl<'a, 'b: 'a> Task<'a, 'b> {
         }
     }
 
-    // do() periodically make a new job and then execute it in background.
-    pub fn do(&mut self) {
+    // start() periodically make a new job and then execute it in background.
+    pub fn start(&mut self) {
         loop {
             let tm = time::now();
 
