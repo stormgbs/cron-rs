@@ -22,15 +22,15 @@ MINUTE HOUR DAY MONTH WEEKDAY
 
 In Cargo.toml:  
 
-`  
+```toml  
     [dependencies]  
     cron_rs = "*"  
-`  
+```
 
-#### Good Example: Cron Time Format (Intervals)
-`  
+#### Good Example: Cron Time Format (Intervals)  
+```
 */2 1-8,11 * * *  
-`  
+````
 
 ### A Full Example  
 
@@ -41,7 +41,7 @@ The example below will show you:
 * Make a scheduler.  
 * Make a task, and then start it, it will spawn and excute new job periodically.  
 
-`  
+```rust
 extern crate time;
 extern crate cron_rs;
 
@@ -84,7 +84,8 @@ fn main() {
     // mytask spawn a new job and execute it every minute.
     mytask.start();
 }  
-`  
+
+```
 
 ## DEPENDENICIES
 
