@@ -1,6 +1,8 @@
-# cron-rs
-
-Cron library that is written in rust.
+# cron_rs  
+![Rust](https://img.shields.io/badge/rust-nightly-red.svg)
+[![Crates.io](https://img.shields.io/crates/d/cron_rs.svg)](https://crates.io/crates/cron_rs)
+[![Docs.rs](https://docs.rs/cron_rs/badge.svg)](https://docs.rs/cron_rs)
+> Cron parser and periodic jobs scheduler that are written in rust.
 
 ## USAGE
 
