@@ -83,7 +83,8 @@ fn main() {
 
     // mytask spawn a new job and execute it every minute.
     mytask.start();
-}  
+
+}
 
 ```
 
