@@ -6,7 +6,9 @@ Cron library that is written in rust.
 
 ### Cron Time Format
 
-`[SECOND] MINUTE HOUR DAY MONTH WEEKDAY`
+`  
+MINUTE HOUR DAY MONTH WEEKDAY  
+`  
 
 * MINUTE (required): minute, 0-59.
 * HOUR (required): hour, 0-23.
@@ -18,13 +20,15 @@ Cron library that is written in rust.
 
 In Cargo.toml:  
 
-`
-    [dependencies]
-    cron_rs = "*"
-`
+`  
+    [dependencies]  
+    cron_rs = "*"  
+`  
 
 #### Good Example: Cron Time Format (Intervals)
-`*/2 1-8,11 * * *`
+`  
+*/2 1-8,11 * * *  
+`  
 
 ### A Full Example  
 
@@ -35,7 +39,7 @@ The example below will show you:
 * Make a scheduler.  
 * Make a task, and then start it, it will spawn and excute new job periodically.  
 
-`
+`  
 extern crate time;
 extern crate cron_rs;
 
@@ -77,8 +81,8 @@ fn main() {
 
     // mytask spawn a new job and execute it every minute.
     mytask.start();
-}
-`
+}  
+`  
 
 ## DEPENDENICIES
 

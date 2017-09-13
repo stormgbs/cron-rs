@@ -33,8 +33,8 @@ impl<'a, 'b: 'a> Task<'a, 'b> {
         loop {
             let tm = time::now();
 
-            if self.scheduler.isTimeUp(&tm) {
-                let mut job = Job::new(100, self.cron.to_command(), self.keeper);
+            if self.scheduler.is_time_up(&tm) {
+                let mut job = Job::new(self.cron.to_command(), self.keeper);
                 job.start();
             }
 
