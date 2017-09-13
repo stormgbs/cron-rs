@@ -1,6 +1,6 @@
 [package]
 name = "cron_rs"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["gaobushuang <stormgbs@gmail.com>"]
 description = "A Cron Parser Library And Job Scheduler Written In Rust"
 repository="https://github.com/stormgbs/cron-rs.git"

@@ -11,7 +11,6 @@ use error::Error::ErrCronFormat;
 
 pub type SchedulerResult<'a> = Result<Scheduler<'a>, Error>;
 
-
 #[derive(Debug)]
 pub struct Scheduler<'a> {
     seconds: &'a str,
@@ -67,30 +66,30 @@ impl<'a> Scheduler<'a> {
                     re: re,
                 };
 
-                try!(sch.parseTimeFields().map_err(|e| ErrCronFormat(e.to_string())));
+                try!(sch.parse_time_fields().map_err(|e| ErrCronFormat(e.to_string())));
                 Ok(sch)
             }
             Err(e) => Err(ErrCronFormat(e.to_string())),
         }
     }
 
-    pub fn parseTimeFields(&mut self) -> Result<(), Error> {
+    pub fn parse_time_fields(&mut self) -> Result<(), Error> {
         if self.seconds != "" {
-            self.timePoints.insert("seconds", try!(parseTimeField(self.seconds, 0, 59)));
+            self.timePoints.insert("seconds", try!(parse_intervals_field(self.seconds, 0, 59)));
         } else {
             self.timePoints.insert("seconds", [0].iter().cloned().collect::<HashSet<u32>>());
         }
 
-        self.timePoints.insert("minutes", try!(parseTimeField(self.minutes, 0, 59)));
-        self.timePoints.insert("hours", try!(parseTimeField(self.hours, 0, 23)));
-        self.timePoints.insert("days", try!(parseTimeField(self.days, 1, 31)));
-        self.timePoints.insert("months", try!(parseTimeField(self.months, 1, 12)));
-        self.timePoints.insert("weekdays", try!(parseTimeField(self.weekdays, 0, 6)));
+        self.timePoints.insert("minutes", try!(parse_intervals_field(self.minutes, 0, 59)));
+        self.timePoints.insert("hours", try!(parse_intervals_field(self.hours, 0, 23)));
+        self.timePoints.insert("days", try!(parse_intervals_field(self.days, 1, 31)));
+        self.timePoints.insert("months", try!(parse_intervals_field(self.months, 1, 12)));
+        self.timePoints.insert("weekdays", try!(parse_intervals_field(self.weekdays, 0, 6)));
 
         Ok(())
     }
 
-    pub fn isTimeUp(&self, t: &time::Tm) -> bool {
+    pub fn is_time_up(&self, t: &time::Tm) -> bool {
         let (second, minute, hour, day, month, weekday) = (t.tm_sec as u32,
                                                            t.tm_min as u32,
                                                            t.tm_hour as u32,
@@ -113,7 +112,7 @@ impl<'a> Scheduler<'a> {
     }
 }
 
-fn parseTimeField(inter: &str, min: u32, max: u32) -> Result<HashSet<u32>, Error> {
+fn parse_intervals_field(inter: &str, min: u32, max: u32) -> Result<HashSet<u32>, Error> {
     let mut points = HashSet::new();
     let parts: Vec<&str> = inter.split(",").collect();
 

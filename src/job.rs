@@ -13,7 +13,7 @@ use output_chunk::{Message, OutputChunkIterator};
 use output_keeper::OutputKeeper;
 
 pub struct Job<'a, 'b: 'a> {
-    id: u32,
+    id: u64,
     command: Command,
     process: Option<Child>,
 
@@ -24,15 +24,19 @@ pub struct Job<'a, 'b: 'a> {
 }
 
 impl<'a, 'b: 'a> Job<'a, 'b> {
-    pub fn new(id: u32, cmd: Command, keeper: &'b OutputKeeper) -> Job<'a, 'b> {
+    pub fn new(cmd: Command, keeper: &'b OutputKeeper) -> Job<'a, 'b> {
         Job {
-            id: id,
+            id: Default::default(),
             command: cmd,
             process: None,
             isStarted: false,
             pid: None,
             keeper: keeper,
         }
+    }
+
+    pub fn set_id(&mut self, id: u64) {
+        self.id = id
     }
 
     // Start the command specified in background, and
@@ -56,6 +60,8 @@ impl<'a, 'b: 'a> Job<'a, 'b> {
 
         let output = self.keeper.tx.clone();
 
+        let jobId = self.id;
+
         thread::spawn(move || {
             let breader = BufReader::new(stdout);
             let outputIter = OutputChunkIterator::new(breader);
@@ -63,8 +69,7 @@ impl<'a, 'b: 'a> Job<'a, 'b> {
             for chunk in outputIter {
                 if let Ok(mut x) = chunk {
                     output.send(Message {
-                        jobId: 100,
-                        //jobId: self.id,
+                        jobId: jobId,
                         kind: "unknown".to_string(),
                         startUnixTimeNs: 0,
                         endUnixTimeNs: 0,
@@ -78,7 +83,7 @@ impl<'a, 'b: 'a> Job<'a, 'b> {
     }
 
     // Start the specified command and
-    // waits for it to complete.
+    // wait for it to be completed.
     pub fn run(&mut self) {
         //TODO
     }

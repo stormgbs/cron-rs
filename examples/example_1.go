@@ -17,7 +17,7 @@ fn main() {
     let tm = time::now();
     let sch = Scheduler::new("*/2 1-4,16,11,17 * * *").unwrap();
     println!("{:?}", sch);
-    println!("{:?} {}", &tm, sch.isTimeUp(&tm));
+    println!("{:?} {}", &tm, sch.is_time_up(&tm));
 
     // Parse cron string to CronEntry
     let cronEntry = r#"{"intervals":"* * * * *","command":"date +%F_%T","description":"print time every minute","daemon":false,"testRun":true,"timeoutSeconds":5,"autokill":true,"alarmEmail":false,"alarmSms":true,"alarmUsers":"gaobushuang","id":1,"cronId":1,"treeId":261,"treePath":"b2c.b2cop.build-ci.build-ci.cn-test","active":false,"updateTime":"2017-02-07T13:22:52+08:00","lastCode":0,"lastJob":0,"watch":true,"host":""}"#

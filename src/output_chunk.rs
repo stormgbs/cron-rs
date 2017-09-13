@@ -7,7 +7,7 @@ use std::thread;
 const MAXREADBUFFERSIZE: usize = 65536;
 
 pub struct Message {
-    pub jobId: u32,
+    pub jobId: u64,
     pub kind: String,
     pub startUnixTimeNs: u64,
     pub endUnixTimeNs: u64,
@@ -39,7 +39,7 @@ impl<B: BufRead> Iterator for OutputChunkIterator<B> {
             } else {
                 match self.buf.read(&mut buffer[..]) {
                     Ok(0) => break,
-                    Ok(n) => chunk.push_str(&String::from_utf8_lossy(&buffer[..n])), 
+                    Ok(n) => chunk.push_str(&String::from_utf8_lossy(&buffer[..n])),
                     Err(e) => return Some(Err(Error::ErrRead(e.to_string()))),
                 }
 

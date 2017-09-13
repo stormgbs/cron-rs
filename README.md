@@ -1,12 +1,16 @@
-# cron-rs
-
-Cron library that is written in rust.
+# cron_rs  
+![Rust](https://img.shields.io/badge/rust-nightly-red.svg)
+[![Crates.io](https://img.shields.io/crates/d/cron_rs.svg)](https://crates.io/crates/cron_rs)
+[![Docs.rs](https://docs.rs/cron_rs/badge.svg)](https://docs.rs/cron_rs)
+> Cron parser and periodic jobs scheduler that are written in rust.
 
 ## USAGE
 
 ### Cron Time Format
 
-`[SECOND] MINUTE HOUR DAY MONTH WEEKDAY`
+`  
+MINUTE HOUR DAY MONTH WEEKDAY  
+`  
 
 * MINUTE (required): minute, 0-59.
 * HOUR (required): hour, 0-23.
@@ -18,13 +22,15 @@ Cron library that is written in rust.
 
 In Cargo.toml:  
 
-`
-    [dependencies]
-    cron_rs = "*"
-`
+```toml  
+    [dependencies]  
+    cron_rs = "*"  
+```
 
-#### Good Example: Cron Time Format (Intervals)
-`*/2 1-8,11 * * *`
+#### Good Example: Cron Time Format (Intervals)  
+```
+*/2 1-8,11 * * *  
+````
 
 ### A Full Example  
 
@@ -35,7 +41,7 @@ The example below will show you:
 * Make a scheduler.  
 * Make a task, and then start it, it will spawn and excute new job periodically.  
 
-```Rust
+```rust
 extern crate time;
 extern crate cron_rs;
 
@@ -77,7 +83,9 @@ fn main() {
 
     // mytask spawn a new job and execute it every minute.
     mytask.start();
+
 }
+
 ```
 
 ## DEPENDENICIES
