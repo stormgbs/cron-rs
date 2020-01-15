@@ -34,7 +34,7 @@ In Cargo.toml:
 
 ### A Full Example  
 
-Scheduler is a cron time shceduler.  
+`Scheduler` is a cron time scheduler.  
 The example below will show you:  
 * Parse CronEntry.  
 * Make a output keeper to capture cron outputs.
